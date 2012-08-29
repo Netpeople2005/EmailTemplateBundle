@@ -50,7 +50,7 @@ class EmailTemplate
 
     public function prepare(array $parameters = array(), $locale = NULL)
     {
-        $this->parameter = $parameters;
+        $this->parameters = $parameters;
         $this->locale = $locale;
         return $this;
     }
@@ -72,15 +72,15 @@ class EmailTemplate
         }
 
         //agrego al propio objeto email como variable en la vista
-        $this->parameter->set('email', $email);
+        $this->parameters['email'] = $email;
 
         //seteo el mensaje a enviar
-        $email->setMessage($this->twig->render($this->view, $this->parameter->all()));
+        $email->setMessage($this->twig->render($this->view, $this->parameters));
 
         //vuelvo a colocar el locale original.
         $this->trans->setLocale($currentLocale);
 
-        if (empty($email->getMessage())) {
+        if ($email->getMessage() == NULL) {
             throw new EmailTemplateException(sprintf("La vista <b>$this->view</b> no tiene ningun contenido a Mandar"));
         }
 
