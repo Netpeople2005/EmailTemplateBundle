@@ -1,1 +1,50 @@
-Hello {{ name }}!
+{% extends "JangoMailBundle::base.html.twig" %}
+{% block cuerpo %}
+<h1>Ver un Template</h1>
+<br/>
+<br/>
+    {% include "JangoMailBundle::flashes.html.twig" %}
+<form id="prueba_templates" action="{{ path("EmailTemplateBundle_renderTemplate") }}" method="post">
+    <ul>
+        <label>Vista del Template : ( AcmeDemoBundle:Default:index.html.twig )</label>
+        <input type="text" class="vista_template span10" /> 
+    </ul>
+    <ul>
+        <label>Locale :</label>
+        <input type="text" class="locale_template span1" value="es" />
+    </ul>
+    <ul>
+        <label>Datos necesarios ( En JSON ) :</label>
+        <textarea class="data_template span10"></textarea>
+    </ul>
+        <input type="submit" value="Ver el Template" />
+</form>
+<div id="template_ajax" style="border: 1px solid black; width: 950px;max-height: 800px;overflow: scroll"></div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+    $(function(){
+        $("#prueba_templates").on('submit',function(event){
+            event.preventDefault();
+            var json = {
+                'view' : $(".vista_template").val(),
+                'locale' : $(".locale_template").val(),
+                'data' : $(".data_template").val()
+            };
+            $.ajax({
+                'url' : $(this).attr('action'),
+                'data': json,
+                'async': false,
+                'type': 'post',
+                'success':function(res){
+                    $("#template_ajax").html(res);
+                },
+                'error':function(res){
+                    $("#template_ajax").html(res.responseText);               
+                }    
+            })
+        })
+    });
+    </script>
+{% endblock %}
