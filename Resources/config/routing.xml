@@ -11,4 +11,8 @@
     <route id="EmailTemplateBundle_renderTemplate" pattern="/showTemplate">
         <default key="_controller">EmailTemplateBundle:Default:renderTemplate</default>
     </route>
+    
+    <route id="EmailTemplateBundle_getFiles" pattern="/files">
+        <default key="_controller">EmailTemplateBundle:Default:getFilesFromView</default>
+    </route>
 </routes>

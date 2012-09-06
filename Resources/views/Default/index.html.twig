@@ -7,7 +7,12 @@
 <form id="prueba_templates" action="{{ path("EmailTemplateBundle_renderTemplate") }}" method="post">
     <ul>
         <label>Vista del Template : ( AcmeDemoBundle:Default:index.html.twig )</label>
-        <input type="text" class="vista_template span10" /> 
+        <select class="bundle_template" >
+            {% for b in bundles %}
+                <option>{{ b }}</option>
+            {% endfor %}
+        </select> :
+        <span id="ajax_select_views"></span>
     </ul>
     <ul>
         <label>Locale :</label>
@@ -28,7 +33,7 @@
         $("#prueba_templates").on('submit',function(event){
             event.preventDefault();
             var json = {
-                'view' : $(".vista_template").val(),
+                'view' : $(".bundle_template").val() + ':' +  $(".view_bundle_template").val(),
                 'locale' : $(".locale_template").val(),
                 'data' : $(".data_template").val()
             };
@@ -39,6 +44,20 @@
                 'type': 'post',
                 'success':function(res){
                     $("#template_ajax").html(res);
+                },
+                'error':function(res){
+                    $("#template_ajax").html(res.responseText);               
+                }    
+            })
+        })
+        $(".bundle_template").on("change",function(){
+            $.ajax({
+                'url' : '{{ path('EmailTemplateBundle_getFiles') }}',
+                'data': { bundle : $(this).val() },
+                'async': false,
+                'type': 'post',
+                'success':function(res){
+                    $("#ajax_select_views").html(res);
                 },
                 'error':function(res){
                     $("#template_ajax").html(res.responseText);               
