@@ -15,4 +15,7 @@
     <route id="EmailTemplateBundle_getFiles" pattern="/files">
         <default key="_controller">EmailTemplateBundle:Default:getFilesFromView</default>
     </route>
+    <route id="EmailTemplateBundle_loadjson" pattern="/getjson/{view}">
+        <default key="_controller">EmailTemplateBundle:Default:loadData</default>
+    </route>
 </routes>

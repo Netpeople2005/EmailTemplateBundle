@@ -20,22 +20,31 @@
     </ul>
     <ul>
         <label>Datos necesarios ( En JSON ) :</label>
-        <textarea class="data_template span10"></textarea>
+        <!--<textarea class="data_template span10"></textarea>-->
+        <div id="json_editor" class="span10"></div>
     </ul>
+        <div class="clear" style="clear: both" ></div>
+        <br class="clear" />
         <input type="submit" value="Ver el Template" />
 </form>
 <div id="template_ajax" style="border: 1px solid black; width: 950px;max-height: 800px;overflow: scroll"></div>
 {% endblock %}
+{% block stylesheets  %}
+{{ parent() }}
+<link type="text/css" rel="stylesheet" href="{{ asset('bundles/emailtemplate/jsoneditor-min.css') }}" />
+{% endblock %}
 {% block javascripts %}
 {{ parent() }}
+<script type="text/javascript" src="{{ asset('bundles/emailtemplate/jsoneditor-min.js') }}"></script>
 <script type="text/javascript">
+    var editor = new JSONEditor(document.getElementById("json_editor"));
     $(function(){
         $("#prueba_templates").on('submit',function(event){
             event.preventDefault();
             var json = {
                 'view' : $(".bundle_template").val() + ':' +  $(".view_bundle_template").val(),
                 'locale' : $(".locale_template").val(),
-                'data' : $(".data_template").val()
+                'data' : JSON.stringify(editor.get())
             };
             $.ajax({
                 'url' : $(this).attr('action'),
@@ -62,6 +71,13 @@
                 'error':function(res){
                     $("#template_ajax").html(res.responseText);               
                 }    
+            })
+        })
+        $("#ajax_select_views").on("change",'.view_bundle_template',function(){
+            var view = $(".bundle_template").val() + ':' +  $(".view_bundle_template").val()
+            $.getJSON('{{ path("EmailTemplateBundle_loadjson",{ view : '' }) }}/' + view,function(json){
+                console.log(json);
+                editor.set(json)            
             })
         })
     });
