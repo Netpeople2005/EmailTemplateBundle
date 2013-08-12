@@ -1,2 +1,5 @@
 .svn
 /Resources/json/
+/.buildpath
+/.project
+/.settings

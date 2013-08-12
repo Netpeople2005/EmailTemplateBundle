@@ -17,5 +17,6 @@
     </route>
     <route id="EmailTemplateBundle_loadjson" pattern="/getjson/{view}">
         <default key="_controller">EmailTemplateBundle:Default:loadData</default>
+        <requirement key="view">.*</requirement>
     </route>
 </routes>
